@@ -13,17 +13,23 @@ import java.io.FileWriter; // Imports File Writer
  *  The purpose of this assignment is to demonstrate our understanding of polymorphism, encapsulation
  *  and classes by creating a currency simulator that can add compare and manipulate objects
  */
+
+
 public class Main {
+	BST tree;
 
 	public Main() {
 		// TODO Auto-generated constructor stub
 	}
+
 	public static void main(String[] args) {
 		Main m = new Main();
-		Scanner sc = new Scanner(System.in);
+
 		m.testAdd();
-		
+		m.userInput();
+
 	}
+
 	private void testAdd() {
 		Dollar[] currencyObjects = new Dollar[20];
 		currencyObjects[0] = new Dollar(57.12);
@@ -46,15 +52,75 @@ public class Main {
 		currencyObjects[17] = new Dollar(1.00);
 		currencyObjects[18] = new Dollar(251.00);
 		currencyObjects[19] = new Dollar(151.00);
-		BST tree = new BST();
+		tree = new BST();
 		for (int i = 0; i < currencyObjects.length; i++) {
 			tree.add(currencyObjects[i]);
 		}
-		
+
+		// OUTPUT THE BELOW TO A FILE TOO
 		tree.printInorder();
-		System.out.println(tree.count());
-		tree.remove(currencyObjects[0]);
-		tree.printInorder();
+		tree.printLevelorder();
+		tree.printPostorder();
+		tree.printPreorder();
+
+	}
+
+	public void userInput() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Welcome to Tree Simulator:");
+		System.out.println(
+				"Enter command(a = add, r = remove, c = count, s = search, q(or anything else that's not a command) = quit, p = print): ");
+		while (true) {
+			String ops = sc.next();
+
+			if (ops.equals("a")) {
+				System.out.println("Input value as double:");
+				double val = sc.nextDouble();
+				if (val >= 0 && val <= 1000) {
+					Dollar x = new Dollar(val);
+					tree.add(x);
+					System.out.println("Added:");
+					x.print();
+				} else {
+					System.out.println("Invalid value!(Must be between 0-1000)");
+				}
+
+			}
+			if (ops.equals("r")) {
+				System.out.println("Input value as double:");
+				double val = sc.nextDouble();
+				Dollar x = new Dollar(val);
+				if (val >= 0 && val <= 1000 && tree.search(x) != null) {
+
+					tree.remove(x);
+					System.out.println("Removed:");
+					x.print();
+				} else {
+					System.out.println("Invalid value or node missing!(Must be between 0-1000)");
+				}
+			}
+			if (ops.equals("s")) {
+				System.out.println("Input value as double:");
+				Dollar x = new Dollar(sc.nextDouble());
+				if (tree.search(x) == null) {
+					System.out.println("Not Found!");
+				} else {
+					System.out.println("Found!");
+				}
+
+			}
+			if (ops.equals("c")) {
+				System.out.println("There are " + tree.count() + " nodes.");
+			}
+			if (ops.equals("p")) {
+				tree.printInorder();
+			}
+
+			else if (ops.equals("q")) {
+				sc.close();
+				System.exit(0);
+			}
+		}
 	}
 
 }
