@@ -1,40 +1,7 @@
-/*
-public abstract class Currency {
-	private int unit;
-	private int fraction;
-	public Currency() {
-		unit = 0;
-		fraction = 0;
-	}
-	public Currency(Currency x) {
-		unit = x.unit;
-		fraction = x.fraction;
-	}
-	public Currency(double z) {
-		unit = (int) z;
-		fraction = (int)(z*100)%100;
-	}
-	
-	public int getUnit() {
-		return unit;
-		
-		
-	}
-	public void setUnit(int unit) {
-		this.unit = unit;
-	}
-	public int getFraction() {
-		return fraction;
-	}
-	public void setFraction(int fraction) {
-		this.fraction = fraction;
-	}
-
-}
-*/
+package test;
 /*   
  *  Name Block:
- *  Lab Number: Lab 2
+ *  Lab Number: Lab 4
  *  Name: Michael Danylchuk, Maxim Manokhin
  *  Team: 1
  *  The purpose of this assignment is to demonstrate our understanding of polymorphism, encapsulation
@@ -42,119 +9,101 @@ public abstract class Currency {
  */
 
 abstract class Currency {
-	// Default Constructor
+private int NoteValue;
+private int CoinValue;
 
-	private int unit, fraction;
+/*
+ * Method: getName()
+ * Pre: getName - String from Derived Currency Methods
+ * Post: returns this.getName
+*/
 
-	public Currency() {
-		// Two Integer Attributes
-		unit = 0;
-		fraction = 0;
-	}
+public String getName() {
+	return this.getName();
+}
 
-	// Construction based on one single input of type double (logical objects only)
-	public Currency(double z) {
-		unit = (int) z;
-		fraction = (int) (z * 100) % 100;
-	}
+//Documentation not required for constructors 
 
-	// Copy Constructor and/or Assignment
-	public Currency(Currency x) {
-		unit = x.unit;
-		fraction = x.fraction;
-	}
+// Currency Constructor, defaults currency object to 0 note and 0 coin
+public Currency(){
+	super();
+	NoteValue = 0;
+	CoinValue = 0;
+}
 
-	// Java doesn't have a destructor it uses garbage collection
+// Currency Constructor as well, allows currency object to have note and coin values
+public Currency(double money) {
+	super();
+	NoteValue = (int)(money);
+	CoinValue = (int)Math.round((money*100)%1000);
+}
 
-	// Getter for Unit attribute
-	public int getUnit() {
-		return unit;
-	}
+/* Algorithm addCurrency(Currency object)
+ * Pre: input x - Currency object
+ * Post: output none
+ * 
+ * if coin value added to currency coin value is greater than or equals 100 coins
+ * 		set coinvalue to current coin value with added coin value
+ * 		set notevalue to to rounded version of current note value and added note value
+*/
 
-	// Getter for Fraction attribute
-	public int getFraction() {
-		return fraction;
-	}
+public void addCurrency(Currency x){
+	if(this.getName().equalsIgnoreCase(x.getName())){
+		   setNoteValue((this.getNoteValue()+x.getNoteValue()));
+		   setCoinValue((this.getCoinValue()+x.getCoinValue()));
+	   }
+}
 
-	// Setter for Unit
-	public void setUnit(int unit) {
-		this.unit = unit;
-	}
+/*
+ * 
+ */
 
-	// Setter for Fraction
-	public void setFraction(int fraction) {
-		this.fraction = fraction;
-	}
-
-	/*
-	 * // needs to manipulate the object and can create and return new objects //
-	 * method to add input object of same currency public int add(Currency x,
-	 * Currency y);
-	 * 
-	 * // subtract method to subtract input object of same currency public int
-	 * subtract(Currency x, Currency y);
-	 */
-	// isEqual method for comparing an input object of same currency
-	public static boolean isEqual(Currency x, Currency y) {
-		if (x.getUnit() == y.getUnit() && x.getFraction() == y.getFraction()) {
-			return true;
+public void subtractCurrency(Currency x) {
+	if(this.getName().equalsIgnoreCase(x.getName())) {
+		double one = (this.getNoteValue()*100 + this.getCoinValue())/100.0;
+		double two = (x.getNoteValue()*100 + x.getCoinValue())/100.0;
+		if(one > two) {
+			setNoteValue((int)(one - two));
+			setCoinValue((int)((one - two)*100)%100);
+		}else {
+			setNoteValue((int)(two - one));
+			setNoteValue((int)((two - one)*100)%100);
 		}
+	}
+}
+
+public boolean isEqual(Currency x) {
+	if(this.getNoteValue() == x.getNoteValue() && this.getCoinValue() == x.getCoinValue()) {
+		return true;
+	}else {
 		return false;
 	}
+}
 
-	// isGreater method for comparing an input object of same currency
-	public static boolean isGreater(Currency x, Currency y) {
-		if (x.getUnit() > y.getUnit() || x.getUnit() >= y.getUnit() && x.getFraction() > y.getFraction()) {
-			return true;
-		}
+public boolean isGreater(Currency x) {
+	if(this.getNoteValue() >= x.getNoteValue() || this.getNoteValue() >= x.getNoteValue() && this.getCoinValue() > x.getCoinValue()) {
+		return true;
+	}else {
 		return false;
 	}
+}
 
-	public abstract void print();
+void print(){
+System.out.print(((double)this.NoteValue + ((double)this.getCoinValue())/100.0) + " " + getName() + " " );
+};
 
-	public abstract String getType();
+public int getNoteValue() {
+	return NoteValue;
+}
+public void setNoteValue(int noteValue) {
+	NoteValue = noteValue;
+}
+public int getCoinValue() {
+	return CoinValue;
+}
+public void setCoinValue(int coinValue) {
+	CoinValue = coinValue;
+}
 
-	public Currency add(Currency a, Currency b) {
-		if (a.getType().equals(b.getType()) && a.getType().equals("Dollar")) {
-			Dollar x = new Dollar(((a.getUnit() + b.getUnit()) * 100 + a.getFraction() + b.getFraction()) / 100.0);
-			return x;
-		} else if (a.getType().equals(b.getType()) && a.getType().equals("Pound")) {
-			Pound x = new Pound(((a.getUnit() + b.getUnit()) * 100 + a.getFraction() + b.getFraction()) / 100.0);
-			return x;
-		}
-		return null;
-	}
 
-	public Currency subtract(Currency a, Currency b) {
-		if (a.getType().equals(b.getType()) && a.getType().equals("Dollar")) {
-			double one = (a.getUnit() * 100 + a.getFraction()) / 100.0;
-			double two = (b.getUnit() * 100 + b.getFraction()) / 100.0;
-			if (one >= two) {
-				Dollar x = new Dollar(one - two);
-				return x;
-			} else {
-				Dollar x = new Dollar(two - one);
-				return x;
-			}
-		} else if (a.getType().equals(b.getType()) && a.getType().equals("Pound")) {
-			double one = (a.getUnit() * 100 + a.getFraction()) / 100.0;
-			double two = (b.getUnit() * 100 + b.getFraction()) / 100.0;
-			if (one >= two) {
-				Pound x = new Pound(one - two);
-				return x;
-			} else {
-				Pound x = new Pound(two - one);
-				return x;
-			}
-		}
-		return null;
-	}
-	// abstract void print(); ??
-	// print method to pring name and value of currency object in form xx.yy
-	// followed by name
-	// public void print() {
-	// System.out.print(unit + fraction + " " + type);
-	// }
-
-	// All above must be instance methods and not static
 }

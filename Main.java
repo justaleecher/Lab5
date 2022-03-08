@@ -1,4 +1,18 @@
 
+package test;
+import java.io.File;  // Import the File class
+import java.io.IOException;  // Import the IOException class to handle errors
+import java.util.Scanner;
+import java.io.FileWriter; // Imports File Writer
+
+/*   
+ *  Name Block:
+ *  Lab Number: Lab 2
+ *  Name: Michael Danylchuk, Maxim Manokhin
+ *  Team: 1
+ *  The purpose of this assignment is to demonstrate our understanding of polymorphism, encapsulation
+ *  and classes by creating a currency simulator that can add compare and manipulate objects
+ */
 public class Main {
 
 	public Main() {
@@ -6,11 +20,12 @@ public class Main {
 	}
 	public static void main(String[] args) {
 		Main m = new Main();
+		Scanner sc = new Scanner(System.in);
 		m.testAdd();
 		
 	}
 	private void testAdd() {
-		Dollar[] currencyObjects = new Dollar[21];
+		Dollar[] currencyObjects = new Dollar[20];
 		currencyObjects[0] = new Dollar(57.12);
 		currencyObjects[1] = new Dollar(23.44);
 		currencyObjects[2] = new Dollar(87.43);
@@ -31,7 +46,6 @@ public class Main {
 		currencyObjects[17] = new Dollar(1.00);
 		currencyObjects[18] = new Dollar(251.00);
 		currencyObjects[19] = new Dollar(151.00);
-		currencyObjects[20] = new Dollar(48.48);
 		BST tree = new BST();
 		for (int i = 0; i < currencyObjects.length; i++) {
 			tree.add(currencyObjects[i]);
